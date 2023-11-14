@@ -2,7 +2,8 @@ require 'json'
 
 class TrainRecordsController < ApplicationController
     def create
-        record = TrainRecord.new(json: params[:json])
+        json = JSON.dump(params[:json])
+        record = TrainRecord.new(json: json)
         if record.save
             render json: {message: "Success!", record: record}
         else
