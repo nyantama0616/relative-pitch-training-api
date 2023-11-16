@@ -1,14 +1,18 @@
 require 'json'
+# require_relative 'train_records/interval_rates'
 
 class TrainRecordsController < ApplicationController
     def create
-        json = JSON.dump(params[:json])
-        record = TrainRecord.new(json: json)
+        record = TrainRecords::Create.call(json_params)
+
         if record.save
             render json: {message: "Success!", record: record}
         else
             render json: {message: "Fail..."}
         end
+
+        # save_json(record[:id], params[:json])
+    end
 
     def interval_rates
         res = TrainRecords::IntervalRates.call(params[:id])
@@ -21,5 +25,9 @@ class TrainRecordsController < ApplicationController
         File.open("./record#{index}.json", "a") do |file|
             JSON.dump(json, file)
         end
+    end
+
+    def json_params
+        json = params.require(:json)
     end
 end
