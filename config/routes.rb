@@ -3,5 +3,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
+  get "/interval_rates", to: "train_records#interval_rates"
   resources :train_records, only: [:create]
 end

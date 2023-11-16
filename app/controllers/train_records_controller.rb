@@ -10,7 +10,9 @@ class TrainRecordsController < ApplicationController
             render json: {message: "Fail..."}
         end
 
-        save_json(record[:id], params[:json])
+    def interval_rates
+        res = TrainRecords::IntervalRates.call(params[:id])
+        render json: {interval_rates: res}
     end
 
     private
