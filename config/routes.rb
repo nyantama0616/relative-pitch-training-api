@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   # root "articles#index"
   get "/interval_rates", to: "train_records#interval_rates"
   resources :train_records, only: [:create]
+  resources :users, only: [:index, :show, :create]
 end
