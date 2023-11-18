@@ -16,7 +16,7 @@ class TrainRecordsController < ApplicationController
 
     def interval_rates
         res = TrainRecords::IntervalRates.call(params[:id])
-        render json: {interval_rates: res}
+        render json: {intervalRates: res}
     end
 
     private
