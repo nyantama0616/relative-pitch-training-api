@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+    before_action :singed_in_check, only: [:show]
+
     def index
         users = User.all
         result = users.as_json(only: [:name, :email])
@@ -32,5 +34,11 @@ class UsersController < ApplicationController
         res = params.require(:user).permit(:name, :email, :password)
         res.merge!(password: params[:password]) if res[:password].nil? #OPTIMIZE: mergeしないとpasswordがnilになるの何で？
         res
+    end
+
+    def singed_in_check
+        unless signed_in?
+            render json: { error: 'Unauthorized' }, status: :unauthorized
+        end
     end
 end
