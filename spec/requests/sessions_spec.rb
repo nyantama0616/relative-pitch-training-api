@@ -12,7 +12,9 @@ RSpec.describe "Sessions", type: :request do
         expect(response).to have_http_status(:success)
       end
   
-      # TODO: ちゃんとログインできるかをテストする
+      it "ログインできてるか" do
+        expect(signed_in?).to be_truthy
+      end
     end
 
     context "パラメータが正しくない場合" do
