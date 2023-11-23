@@ -29,6 +29,8 @@ class UsersController < ApplicationController
     private
 
     def user_params
-        params.require(:user).permit(:name, :email, :password).merge(password: params[:password]) #OPTIMIZE: mergeしないとpasswordがnilになるの何で？
+        res = params.require(:user).permit(:name, :email, :password)
+        res.merge!(password: params[:password]) if res[:password].nil? #OPTIMIZE: mergeしないとpasswordがnilになるの何で？
+        res
     end
 end
