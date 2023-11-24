@@ -14,7 +14,7 @@ RSpec.describe "Users", type: :request do
     it "ユーザ(nameとemail)の一覧が取得できる" do
       json = JSON.parse(response.body)
       
-      expect(json).to eq @users.as_json(only: [:name, :email])
+      expect(json).to eq @users.as_json(only: [:user_name, :email])
     end
   end
 
@@ -53,7 +53,7 @@ RSpec.describe "Users", type: :request do
       it "ユーザ(nameとemail)が取得できる" do
         json = JSON.parse(response.body)
         
-        expect(json).to eq @user.as_json(only: [:name, :email])
+        expect(json).to eq @user.as_json(only: [:user_name, :email])
       end
     end
 

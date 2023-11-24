@@ -3,14 +3,14 @@ class UsersController < ApplicationController
 
     def index
         users = User.all
-        result = users.as_json(only: [:name, :email])
+        result = users.as_json(only: [:user_name, :email])
         
         render json: result
     end
 
     def show
         user = User.find_by(id: params[:id])
-        result = user.as_json(only: [:name, :email])
+        result = user.as_json(only: [:user_name, :email])
 
         if user
             render json: result
@@ -31,7 +31,7 @@ class UsersController < ApplicationController
     private
 
     def user_params
-        res = params.require(:user).permit(:name, :email, :password)
+        res = params.require(:user).permit(:user_name, :email, :password)
         res.merge!(password: params[:password]) if res[:password].nil? #OPTIMIZE: mergeしないとpasswordがnilになるの何で？
         res
     end

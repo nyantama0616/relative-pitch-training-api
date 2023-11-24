@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   # root "articles#index"
   get "/interval_rates", to: "train_records#interval_rates"
   post "/signin", to: "sessions#create"
+  post "/signup", to: "users#create"
 
   resources :train_records, only: [:create]
   resources :users, only: [:index, :show, :create]
