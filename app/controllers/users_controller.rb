@@ -3,14 +3,14 @@ class UsersController < ApplicationController
 
     def index
         users = User.all
-        result = users.as_json(only: [:user_name, :email])
+        result = users.as_json(only: [:user_name, :email, :image_path])
         
         render json: result
     end
 
     def show
         user = User.find_by(id: params[:id])
-        result = user.as_json(only: [:user_name, :email])
+        result = user.as_json(only: [:user_name, :email, :image_path])
 
         if user
             render json: result

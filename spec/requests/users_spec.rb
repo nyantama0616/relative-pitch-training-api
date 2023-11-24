@@ -11,10 +11,10 @@ RSpec.describe "Users", type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it "ユーザ(nameとemail)の一覧が取得できる" do
+    it "ユーザ(name, email, image_path)の一覧が取得できる" do
       json = JSON.parse(response.body)
       
-      expect(json).to eq @users.as_json(only: [:user_name, :email])
+      expect(json).to eq @users.as_json(only: [:user_name, :email, :image_path])
     end
   end
 

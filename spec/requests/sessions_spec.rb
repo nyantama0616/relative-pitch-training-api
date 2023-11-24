@@ -15,6 +15,12 @@ RSpec.describe "Sessions", type: :request do
       it "ログインできてるか" do
         expect(signed_in?).to be_truthy
       end
+
+      it "ユーザ(name, email, image_path)が取得できる" do
+        json = JSON.parse(response.body)
+        
+        expect(json).to eq @user.as_json(only: [:user_name, :email, :image_path])
+      end
     end
 
     context "パラメータが正しくない場合" do
