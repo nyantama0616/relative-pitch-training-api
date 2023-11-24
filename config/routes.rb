@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
   resources :train_records, only: [:create]
   resources :users, only: [:index, :show, :create]
+  
+  get "/images/:image_path", to: "images#show"
 
   #なんとなくnamespaceで分けてみた
   namespace :test do
