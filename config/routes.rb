@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   post "/signin", to: "sessions#create"
   post "/signup", to: "users#create"
 
-  resources :train_records, only: [:create]
+  resources :train_records, only: [:index, :create]
   resources :users, only: [:index, :show, :create]
   
   get "/images/:image_path", to: "images#show"
