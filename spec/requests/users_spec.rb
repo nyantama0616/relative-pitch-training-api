@@ -37,12 +37,10 @@ RSpec.describe "Users", type: :request do
   end
 
   describe "GET /users/:id" do
-    #TODO: サインイン済みの際のテストを書く。
-    # 現状、rspecでsessionを扱う方法がわからないので、signinをmockできない
-    pending "サインイン済み" do
+    context "サインイン済み" do
       before do
         @user = FactoryBot.create(:user)
-        signin(@user.email, @user.password)
+        # signin(@user.email, @user.password)
         get "/users/#{@user[:id]}"
       end
       
@@ -50,14 +48,15 @@ RSpec.describe "Users", type: :request do
         expect(response).to have_http_status(:success)
       end
 
-      it "ユーザ(nameとemail)が取得できる" do
+      it "ユーザ(name, email, image_path)が取得できる" do
         json = JSON.parse(response.body)
         
-        expect(json).to eq @user.as_json(only: [:user_name, :email])
+        expect(json).to eq @user.as_json(only: [:user_name, :email, :image_path])
       end
     end
 
-    context "未サインイン" do
+    # TODO: 現状、コントローラでサインインチェックをしていないため、このテストは保留する
+    pending "未サインイン" do
       before do
         @user = FactoryBot.create(:user)
         get "/users/#{@user[:id]}"

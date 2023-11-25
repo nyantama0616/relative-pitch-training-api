@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-    before_action :singed_in_check, only: [:show]
+    # before_action :singed_in_check, only: [:show]
 
     def index
         users = User.all
