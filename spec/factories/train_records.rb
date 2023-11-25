@@ -1,7 +1,7 @@
 NOTES = [50, 52, 53, 55, 57, 59, 62, 64, 65, 67, 69, 71]
 
 FactoryBot.define do
-  factory :train_record do
+  factory :train_record do |_user_id|
     interval_records = []
     100.times do |i|
         record = {
@@ -13,5 +13,6 @@ FactoryBot.define do
         interval_records.push(record)
     end
     json { JSON.dump(interval_records) }
+    user_id { _user_id }
   end
 end
