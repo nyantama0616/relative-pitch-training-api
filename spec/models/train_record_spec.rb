@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe TrainRecord, type: :model do
-  describe 'create' do
+  describe 'validations' do
     before do
       @user = FactoryBot.create(:user)
       @train_record = FactoryBot.build(:train_record, user_id: @user.id)
@@ -18,5 +18,12 @@ RSpec.describe TrainRecord, type: :model do
       expect(@train_record.errors[:user_id]).to include("can't be blank")
     end
 
+    describe "jsonの形式が不正だと保存できない" do
+      it "case1" do
+        @train_record.json = "invalid json"
+        @train_record.valid?
+        expect(@train_record.errors[:json]).to include("invalid json")
+      end
+    end
   end
 end

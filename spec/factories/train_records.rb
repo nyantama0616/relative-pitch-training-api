@@ -3,7 +3,7 @@ NOTES = [50, 52, 53, 55, 57, 59, 62, 64, 65, 67, 69, 71]
 FactoryBot.define do
   factory :train_record do |_user_id|
     interval_records = []
-    100.times do |i|
+    10.times do |i|
         record = {
             note0: 60,
             note1: NOTES.sample,
