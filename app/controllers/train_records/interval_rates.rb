@@ -8,7 +8,7 @@ module TrainRecords
         NOTES = [50, 52, 53, 55, 57, 59, 62, 64, 65, 67, 69, 71]
         def self.call(id)
             record = TrainRecord.find(id)
-            interval_records = JSON.parse(record[:json], symbolize_names: true)
+            interval_records = JSON.parse(record[:records], symbolize_names: true)
 
             hash = {}
             NOTES.each do |note|

@@ -13,7 +13,7 @@ FactoryBot.define do
         interval_records.push(record)
     end
     
-    json { JSON.dump(interval_records) }
+    records { JSON.dump(interval_records) }
     user { create(:user) }
   end
 end

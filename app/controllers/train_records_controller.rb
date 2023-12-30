@@ -2,38 +2,33 @@ require 'json'
 # require_relative 'train_records/interval_rates'
 
 class TrainRecordsController < ApplicationController
-    # 指定されたユーザーのトレーニング記録を全て取得する(トレーニングidの配列を返す)
-    def index
-        record_ids = TrainRecord.where(user_id: params[:user_id]).order(:created_at).pluck(:id)
-        render json: {train_record_ids: record_ids}
-    end
+	def create
+		unless user = User.find(params[:user_id])
+			render json: {message: "User not found"}, status: 404
+		end
 
-    def create
-        record = TrainRecords::Create.call(json_params)
+		records = TrainRecord.dumped_records(params[:records])
+		train_record = TrainRecord.new(user: user, records: records)
 
-        if record.save
-            render json: {message: "Success!", record: record}
-        else
-            render json: {message: "Fail..."}
-        end
+		if train_record.save
+		    render json: { message: "Success!", record: train_record }
+		else
+		    render json: { message: "Failed..." }, status: 500
+		end
 
-        # save_json(record[:id], params[:json])
-    end
+		# save_json(record[:id], params[:json])
+	end
 
-    def interval_rates
-        res = TrainRecords::IntervalRates.call(params[:id])
-        render json: {intervalRates: res}
-    end
+	def interval_rates
+		res = TrainRecords::IntervalRates.call(params[:id])
+		render json: {intervalRates: res}
+	end
 
-    private
+	private
 
-    def save_json(index, json)
-        File.open("./record#{index}.json", "a") do |file|
-            JSON.dump(json, file)
-        end
-    end
-
-    def json_params
-        json = params.require(:json)
-    end
+	def save_json(index, json)
+		File.open("./record#{index}.json", "a") do |file|
+				JSON.dump(json, file)
+		end
+	end
 end

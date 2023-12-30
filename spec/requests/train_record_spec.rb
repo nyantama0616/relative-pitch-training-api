@@ -1,30 +1,42 @@
 require 'rails_helper'
 
 RSpec.describe "TrainRecords", type: :request do
-  describe "GET /train_records" do
+  describe "POST /train_records" do
     before do
-      @users = FactoryBot.create_list(:user, 3)
-      10.times do |i|
-        FactoryBot.create(:train_record, user_id: @users[i % 3].id)
-      end
+      @user = FactoryBot.create(:user)
+      @records = [
+          {
+            "note0" => "0",
+            "note1" => "0",
+            "missCount" => "0",
+            "duration" => "0"
+          },
+          {
+            "note0" => "0",
+            "note1" => "1",
+            "missCount" => "0",
+            "duration" => "0"
+          },
+        ]
       
-      get "/train_records", params: {user_id: @users[0].id}
+      post "/train_records", params: {records: @records, user_id: @user.id}
     end
 
-    it "200 OKが返ってくる" do
-      expect(response).to have_http_status(:ok)
+    it "200が返ってくる" do
+      expect(response).to have_http_status(200)
     end
 
-    it "返り値が整数の配列である" do
-      ids = JSON.parse(response.body)["train_record_ids"]
-      
-      expect(ids).to be_an_instance_of(Array)
-      expect(ids.all?{|id| id.is_a?(Integer)}).to be_truthy
+    it "TrainRecordが1つ作成される" do
+      expect(TrainRecord.count).to eq 1
     end
 
-    it "返り値がTrainRecord.where(user_id: @users[0].id).order(:created_at)の結果と一致する" do
-      ids = JSON.parse(response.body)["train_record_ids"]
-      expect(ids).to eq TrainRecord.where(user_id: @users[0].id).order(:created_at).pluck(:id)
+    it "TrainRecordのrecordsが正しい値になっている" do
+      parsed = JSON.parse(TrainRecord.first.records)
+      expect(parsed).to eq @records
+    end
+
+    it "TrainRecordのuser_idが正しい値になっている" do
+      expect(TrainRecord.first.user_id).to eq @user.id
     end
   end
 

@@ -1,7 +1,18 @@
 class TrainRecord < ApplicationRecord
   belongs_to :user
   validates :user_id, presence: true
-  validate :json_must_be_appropriate_format
+  validate :records_must_be_appropriate_format
+
+  class << self
+    # params[:records]を渡す
+    def dumped_records(records_json)
+      json = JSON.dump(records_json)
+      json.gsub!(/\\/, "")
+      json.gsub!("\"{", "{")
+      json.gsub!("}\"", "}")
+      json.gsub("=>", ":")
+    end
+  end
 
   private
 
@@ -14,9 +25,9 @@ class TrainRecord < ApplicationRecord
   #     "duration" => 3,
   #   },
   # ]
-  def json_must_be_appropriate_format
+  def records_must_be_appropriate_format
     begin
-      parsed = JSON.parse(json)
+      parsed = JSON.parse(records)
     rescue => exception
       errors.add(:json, "invalid json")
       return
