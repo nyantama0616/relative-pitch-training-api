@@ -3,9 +3,9 @@ class UsersController < ApplicationController
 
     def index
         users = User.all
-        result = users.as_json(only: [:user_name, :email, :image_path])
+        result = users.map(&:info)
         
-        render json: result
+        render json: { users: result }
     end
 
     def show
@@ -21,6 +21,7 @@ class UsersController < ApplicationController
 
     def create
         user = User.new(user_params)
+        
         if user.save
             render json: user, status: :created
         else
@@ -31,14 +32,10 @@ class UsersController < ApplicationController
     private
 
     def user_params
-        res = params.require(:user).permit(:user_name, :email, :password)
-        res.merge!(password: params[:password]) if res[:password].nil? #OPTIMIZE: mergeしないとpasswordがnilになるの何で？
-        res
-    end
-
-    def singed_in_check
-        unless signed_in?
-            render json: { error: 'Unauthorized' }, status: :unauthorized
-        end
+        {
+            name: params[:userName],
+            email: params[:email],
+            password: params[:password]
+        }
     end
 end
