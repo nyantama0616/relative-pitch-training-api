@@ -1,8 +1,8 @@
 class SessionsController < ApplicationController
     def create
         if signin(session_params[:email], session_params[:password])
-            result = @user.as_json(only: [:user_name, :email, :image_path])
-            render json: result, status: :ok
+            result = @user.info
+            render json: { user: result }, status: :ok
         else
             render json: { errors: ["Invalid email or password"] }, status: :unauthorized
         end
