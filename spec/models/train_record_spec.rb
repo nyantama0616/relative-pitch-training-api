@@ -20,7 +20,7 @@ RSpec.describe TrainRecord, type: :model do
 
     describe "jsonの形式が不正だと保存できない" do
       it "case1" do
-        @train_record.json = "invalid json"
+        @train_record.records = "invalid json"
         @train_record.valid?
         expect(@train_record.errors[:json]).to include("invalid json")
       end

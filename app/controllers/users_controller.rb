@@ -33,7 +33,7 @@ class UsersController < ApplicationController
 
     def user_params
         {
-            name: params[:userName],
+            user_name: params[:userName],
             email: params[:email],
             password: params[:password]
         }

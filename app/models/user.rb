@@ -4,8 +4,8 @@ class User < ApplicationRecord
     has_many :train_records, dependent: :destroy
 
     def info
-        json = as_json(only: [:id, :name, :email])
-        json['userName'] = json.delete('name')
+        json = as_json(only: [:id, :user_name, :email, :image_path])
+        json.deep_transform_keys! { |key| key.camelize(:lower) }
         json
     end
 end

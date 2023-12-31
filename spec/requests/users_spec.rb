@@ -11,10 +11,11 @@ RSpec.describe "Users", type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it "ユーザ(name, email, image_path)の一覧が取得できる" do
-      json = JSON.parse(response.body)
+    it "ユーザ(id, userName, email, imagePath)の一覧が取得できる" do
+      ary = JSON.parse(response.body)["users"]
+      keys = ["id", "userName", "email", "imagePath"].sort
       
-      expect(json).to eq @users.as_json(only: [:user_name, :email, :image_path])
+      expect(ary[0].keys.sort).to eq(keys)
     end
   end
 
@@ -22,7 +23,7 @@ RSpec.describe "Users", type: :request do
     before do
       @user_params = FactoryBot.attributes_for(:user)
       
-      post "/users", params: {user: @user_params}
+      post "/users", params: @user_params
     end
     
     it "リクエストに成功する" do
