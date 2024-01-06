@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_30_131159) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_06_121828) do
   create_table "train_records", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.text "records"
+    t.text "questions"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
