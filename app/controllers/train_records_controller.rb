@@ -1,6 +1,14 @@
 require 'json'
 
 class TrainRecordsController < ApplicationController
+	def show
+		unless record = TrainRecord.find(params[:id])
+			render json: {message: "Record not found"}, status: :not_found
+		end
+
+		render json: {record: record.info}
+	end
+
 	def create
 		unless user = User.find(params[:user_id])
 			render json: {message: "User not found"}, status: :not_found

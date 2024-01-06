@@ -3,6 +3,14 @@ class TrainRecord < ApplicationRecord
   validates :user_id, presence: true
   validate :questions_must_be_appropriate_format
 
+  def info
+    {
+      id: id,
+      userId: user_id,
+      questions: questions,
+    }
+  end
+
   class << self
     # params[:records]を渡す
     # def dumped_records(records_json)

@@ -55,6 +55,32 @@ RSpec.describe "TrainRecords", type: :request do
   #   end
   # end
 
+  describe "GET /train_records/:id" do
+    before do
+      train_record = FactoryBot.create(:train_record)
+
+      get "/train_records/#{train_record.id}"
+      
+      @record = response.parsed_body["record"]
+    end
+
+    it "200が返ってくる" do
+      expect(response).to have_http_status(200)
+    end
+
+    it "TrainRecordのidが正しい値になっている" do
+      expect(@record["id"]).to eq TrainRecord.first.id
+    end
+
+    it "TrainRecordのuser_idが正しい値になっている" do
+      expect(@record["userId"]).to eq TrainRecord.first.user_id
+    end
+
+    it "TrainRecordのquestionsが正しい値になっている" do
+      expect(@record["questions"]).to eq TrainRecord.first.questions
+    end
+  end
+
   describe "POST /train_records" do
     before do
       params = FactoryBot.build(:train_record).attributes
