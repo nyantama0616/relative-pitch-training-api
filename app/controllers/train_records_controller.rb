@@ -2,7 +2,7 @@ require 'json'
 
 class TrainRecordsController < ApplicationController
 	def show
-		unless record = TrainRecord.find(params[:id])
+		unless record = params[:id].to_i < 0 ? TrainRecord.last : TrainRecord.find(params[:id])
 			render json: {message: "Record not found"}, status: :not_found
 		end
 

@@ -80,6 +80,16 @@ RSpec.describe "TrainRecords", type: :request do
       expected_questions = TrainRecord.parsed_questions(TrainRecord.first.questions)
       expect(@record["questions"]).to eq expected_questions
     end
+
+    it "idが負の値の場合、最新のTrainRecordが返ってくる" do
+      FactoryBot.create_list(:train_record, 3)
+      last_record = TrainRecord.last
+      
+      get "/train_records/-1"
+      
+      record = response.parsed_body["record"]
+      expect(record["id"]).to eq last_record.id
+    end
   end
 
   describe "POST /train_records" do
