@@ -1,22 +1,19 @@
 require 'json'
-# require_relative 'train_records/interval_rates'
 
 class TrainRecordsController < ApplicationController
 	def create
 		unless user = User.find(params[:user_id])
-			render json: {message: "User not found"}, status: 404
+			render json: {message: "User not found"}, status: :not_found
 		end
 
-		records = TrainRecord.dumped_records(params[:records])
-		train_record = TrainRecord.new(user: user, records: records)
+		dumped_questions = TrainRecord.dumped_questions(create_params[:questions])
+		record = TrainRecord.new(user: user, questions: dumped_questions)
 
-		if train_record.save
-		    render json: { message: "Success!", record: train_record }
+		if record.save
+			render json: {recordId: record.id}, status: :created
 		else
-		    render json: { message: "Failed..." }, status: 500
+			render json: {message: "Failed..."}, status: :internal_server_error
 		end
-
-		# save_json(record[:id], params[:json])
 	end
 
 	def interval_rates
@@ -30,5 +27,12 @@ class TrainRecordsController < ApplicationController
 		File.open("./record#{index}.json", "a") do |file|
 				JSON.dump(json, file)
 		end
+	end
+
+	def create_params
+		{
+			user_id: params[:user_id],
+			questions: params[:questions]
+		}
 	end
 end
