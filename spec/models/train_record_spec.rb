@@ -3,8 +3,7 @@ require 'rails_helper'
 RSpec.describe TrainRecord, type: :model do
   describe 'validations' do
     before do
-      @user = FactoryBot.create(:user)
-      @train_record = FactoryBot.build(:train_record, user_id: @user.id)
+      @train_record = FactoryBot.build(:train_record)
     end
 
     it "Factorybotによるcreateはできる" do
@@ -20,7 +19,7 @@ RSpec.describe TrainRecord, type: :model do
 
     describe "jsonの形式が不正だと保存できない" do
       it "case1" do
-        @train_record.records = "invalid json"
+        @train_record.questions = "invalid json"
         @train_record.valid?
         expect(@train_record.errors[:json]).to include("invalid json")
       end

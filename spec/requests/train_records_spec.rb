@@ -57,21 +57,10 @@ RSpec.describe "TrainRecords", type: :request do
 
   describe "POST /train_records" do
     before do
-      user = FactoryBot.create(:user)
-      questions = [
-        {
-          "interval" => {
-            "note0" => 60,
-            "note1" => 62
-          },
-          "startTime" => 0,
-          "keyPushes" => [
-            "note" => 65,
-            "time" => 100
-          ]
-        }
-      ]
-      post "/train_records", params: {user_id: user.id, questions: questions}
+      params = FactoryBot.build(:train_record).attributes
+      params = {user_id: params["user_id"], questions: TrainRecord.parsed_questions(params["questions"])}
+
+      post "/train_records", params: params
     end
 
     it "201が返ってくる" do
