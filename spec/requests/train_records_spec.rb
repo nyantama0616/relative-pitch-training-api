@@ -77,7 +77,8 @@ RSpec.describe "TrainRecords", type: :request do
     end
 
     it "TrainRecordのquestionsが正しい値になっている" do
-      expect(@record["questions"]).to eq TrainRecord.first.questions
+      expected_questions = TrainRecord.parsed_questions(TrainRecord.first.questions)
+      expect(@record["questions"]).to eq expected_questions
     end
   end
 

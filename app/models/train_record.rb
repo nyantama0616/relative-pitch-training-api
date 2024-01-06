@@ -7,7 +7,7 @@ class TrainRecord < ApplicationRecord
     {
       id: id,
       userId: user_id,
-      questions: questions,
+      questions: TrainRecord.parsed_questions(questions),
     }
   end
 
