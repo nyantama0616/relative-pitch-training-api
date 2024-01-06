@@ -10,7 +10,7 @@ class TrainRecordsController < ApplicationController
 	end
 
 	def create
-		unless user = User.find(params[:user_id])
+		unless user = User.find(create_params[:user_id])
 			render json: {message: "User not found"}, status: :not_found
 		end
 
@@ -39,7 +39,7 @@ class TrainRecordsController < ApplicationController
 
 	def create_params
 		{
-			user_id: params[:user_id],
+			user_id: params[:userId],
 			questions: params[:questions]
 		}
 	end
