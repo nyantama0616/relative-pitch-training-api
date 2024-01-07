@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_06_121828) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_07_054257) do
+  create_table "questionnaires", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "data_file_path", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_questionnaires_on_user_id"
+  end
+
   create_table "train_records", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.text "questions"
     t.datetime "created_at", null: false
@@ -29,5 +38,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_06_121828) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "questionnaires", "users"
   add_foreign_key "train_records", "users"
 end
