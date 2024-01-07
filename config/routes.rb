@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   
   get "/images/:image_path", to: "images#show"
 
+  get "/questionnaires/:name", to: "questionnaires#show"
+
   #なんとなくnamespaceで分けてみた
   namespace :test do
     get "ping", to: "tests#ping"
