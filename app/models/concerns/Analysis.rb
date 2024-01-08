@@ -22,10 +22,13 @@ module Analysis
       reaction_time = q["keyPushes"][-1]["time"] - q["startTime"]
       miss_count = q["keyPushes"].count - 1
 
+      misses = q["keyPushes"][0..-2].map { |k| k.transform_keys(&:to_sym).merge({diff: k["note"] - interval[:note1]})}
+
       {
         interval: interval,
         reaction_time: reaction_time,
-        miss_count: miss_count
+        miss_count: miss_count,
+        misses: misses,
       }
     end
   end
@@ -45,11 +48,11 @@ module Analysis
     end
 
     {
-      reaction_time: reaction_time.transform_values { |v| v[0] / v[1] },
-      miss_count: miss_count.transform_values { |v| v[0] / v[1] }
+      reaction_time: reaction_time.transform_values { |v| v[0] / v[1].to_f },
+      miss_count: miss_count.transform_values { |v| v[0] / v[1].to_f }
     }
   end
-  
+
   def medians
     reaction_time = NOTES.map { |note| [note, []] }.to_h
     miss_count = NOTES.map { |note| [note, []] }.to_h
@@ -61,9 +64,19 @@ module Analysis
       miss_count[note].push(info[:miss_count])
     end
 
+    ramda = ->(v) {
+      n = v.length
+      _v = v.sort
+      if n % 2 == 0
+        (_v.sort[n / 2 - 1] + _v[n / 2]) / 2.0
+      else
+        _v.sort[n / 2]
+      end
+    }
+
     {
-      reaction_time: reaction_time.transform_values { |v| v.sort[v.length / 2] },
-      miss_count: miss_count.transform_values { |v| v.sort[v.length / 2] }
+      reaction_time: reaction_time.transform_values(&ramda),
+      miss_count: miss_count.transform_values(&ramda)
     }
   end
 end
