@@ -1,4 +1,6 @@
 class TrainRecord < ApplicationRecord
+  include Analysis
+
   belongs_to :user
   validates :user_id, presence: true
   validate :questions_must_be_appropriate_format
@@ -12,15 +14,6 @@ class TrainRecord < ApplicationRecord
   end
 
   class << self
-    # params[:records]を渡す
-    # def dumped_records(records_json)
-    #   json = JSON.dump(records_json)
-    #   json.gsub!(/\\/, "")
-    #   json.gsub!("\"{", "{")
-    #   json.gsub!("}\"", "}")
-    #   json.gsub("=>", ":")
-    # end
-
     def dumped_questions(questions_json)
       json = JSON.dump(questions_json)
       json.gsub!(/\\/, "")
@@ -36,15 +29,6 @@ class TrainRecord < ApplicationRecord
 
   private
 
-  # 以下のような形式のJSONを想定している
-  # [
-  #   {
-  #     "note0" => 0,
-  #     "note1" => 1,
-  #     "missCount" => 2,
-  #     "duration" => 3,
-  #   },
-  # ]
   def questions_must_be_appropriate_format
     begin
       parsed = TrainRecord.parsed_questions(questions)
