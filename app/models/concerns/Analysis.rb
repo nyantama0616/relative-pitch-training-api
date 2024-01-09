@@ -79,4 +79,13 @@ module Analysis
       miss_count: miss_count.transform_values(&ramda)
     }
   end
+
+  def train_time
+    a = questions_parsed
+    if a.empty?
+      0
+    else
+      a[-1]["keyPushes"][-1]["time"] #ms
+    end
+  end
 end
