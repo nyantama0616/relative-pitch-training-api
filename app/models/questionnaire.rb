@@ -2,17 +2,15 @@ require 'csv'
 require 'fileutils'
 
 class Questionnaire < ApplicationRecord
-  attr_accessor :data
-
   with_options presence: true do
     validates :name
     validates :user_id
+    validates :data
   end
 
   validate :data_must_not_be_empty
 
   before_save :save_data
-  before_destroy :destroy_data
 
   class << self
     def get_questionnaire(name)
@@ -26,6 +24,33 @@ class Questionnaire < ApplicationRecord
 
       csv_data.map(&:to_h)
     end
+
+    def dumped_data(data)
+      json = JSON.dump(data)
+      json.gsub!(/\\/, "")
+      json.gsub!("\"{", "{")
+      json.gsub!("}\"", "}")
+      json.gsub("=>", ":")
+    end
+
+    def parsed_data(data_dumped)
+      JSON.parse(data_dumped)
+    end
+  end
+
+  def output_file
+    dir = "tmp/#{Rails.env}/questionnaire"
+    FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
+    file_path = "#{dir}/#{self.id}.csv"
+    
+    parsed = Questionnaire.parsed_data(self.data)
+    
+    CSV.open(file_path, 'w') do |csv|
+      csv << parsed.first.keys
+      parsed.each do |hash|
+        csv << hash.values
+      end
+    end
   end
 
   private
@@ -36,21 +61,5 @@ class Questionnaire < ApplicationRecord
 
   def save_data
     self.data_file_path = Questionnaire.last ? Questionnaire.last.id + 1 : 1 #TODO: 要改善
-    
-    dir = "storage/#{Rails.env}/questionnaire"
-    FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
-    file_path = "#{dir}/#{self.data_file_path}.csv"
-    
-    CSV.open(file_path, 'w') do |csv|
-      csv << data.first.keys
-      data.each do |hash|
-        csv << hash.values
-      end
-    end
-  end
-
-  def destroy_data
-    file_path = "storage/#{Rails.env}/questionnaire/#{self.data_file_path}.csv"
-    FileUtils.rm(file_path) if File.exist?(file_path)
   end
 end

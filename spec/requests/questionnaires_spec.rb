@@ -28,16 +28,16 @@ RSpec.describe "Questionnaires", type: :request do
   describe "POST /questionnaires/" do
     before do
       user = FactoryBot.create(:user)
-      data = [
+      @data = [
         {
-          "id" => 1,
+          "id" => "1",
           "content" => "test",
           "answer" => "answer",
-          "maxSelectNum" => 1,
+          "maxSelectNum" => "1",
           "remarks" => "remarks"
         }
       ]
-      post "/questionnaires", params: { questionnaireName: "attribute", data: data, userId: user.id }
+      post "/questionnaires", params: { questionnaireName: "attribute", data: @data, userId: user.id }
     end
 
     after do
@@ -49,11 +49,15 @@ RSpec.describe "Questionnaires", type: :request do
       expect(response).to have_http_status(201)
     end
 
-    it "storage/questionnaires/:idが作成される" do
-      user = User.first
+    it "dataが保存されている" do
       question = Questionnaire.first
-      file_path = "storage/#{Rails.env}/questionnaire/#{question.data_file_path}.csv" #TODO: ディレクトリしか見てないけど
-      expect(File.exist?(file_path)).to eq true
+      Questionnaire.parsed_data(question.data).each_with_index do |hash, index|
+        expect(hash["id"]).to eq @data[index]["id"]
+        expect(hash["content"]).to eq @data[index]["content"]
+        expect(hash["answer"]).to eq @data[index]["answer"]
+        expect(hash["maxSelectNum"]).to eq @data[index]["maxSelectNum"]
+        expect(hash["remarks"]).to eq @data[index]["remarks"]
+      end
     end
   end
 end

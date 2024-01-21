@@ -16,8 +16,7 @@ class QuestionnairesController < ApplicationController
       return
     end
 
-    question = Questionnaire.new(create_params.except(:data))
-    question.data = create_params[:data]
+    question = Questionnaire.new(create_params)
 
     unless question.save
       render json: {message: "Failed to create a questionnaire"}, status: :internal_server_error
@@ -33,7 +32,7 @@ class QuestionnairesController < ApplicationController
     {
       user_id: params[:userId],
       name: params[:questionnaireName],
-      data: params[:data],
+      data: Questionnaire.dumped_data(params[:data]),
     }
   end
 end
