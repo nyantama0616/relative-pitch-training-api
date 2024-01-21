@@ -8,10 +8,6 @@ class Questionnaire < ApplicationRecord
     validates :data
   end
 
-  validate :data_must_not_be_empty
-
-  before_save :save_data
-
   class << self
     def get_questionnaire(name)
       file_path = "app/assets/questionnaire/#{name}.csv"
@@ -51,15 +47,5 @@ class Questionnaire < ApplicationRecord
         csv << hash.values
       end
     end
-  end
-
-  private
-
-  def data_must_not_be_empty
-    errors.add(:data, "can't be empty") if data.blank?
-  end
-
-  def save_data
-    self.data_file_path = Questionnaire.last ? Questionnaire.last.id + 1 : 1 #TODO: 要改善
   end
 end
