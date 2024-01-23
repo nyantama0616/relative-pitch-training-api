@@ -2,6 +2,8 @@ require 'csv'
 require 'fileutils'
 
 class Questionnaire < ApplicationRecord
+  belongs_to :user
+
   with_options presence: true do
     validates :name
     validates :user_id
