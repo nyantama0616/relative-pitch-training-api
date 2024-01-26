@@ -38,4 +38,28 @@ FactoryBot.define do
     questions { TrainRecord.dumped_questions(questions) }
     user { create(:user) }
   end
+
+  factory :train_record5, class: TrainRecord do |_user_id|
+    records = []
+    12.times do |i|
+      5.times do
+        note1 = NOTES[i]
+        record = {
+            "interval" => {
+              "note0" => 60,
+              "note1" => note1,
+            },
+            "startTime" => 0,
+            "keyPushes" => [
+                {"note" => 45, "time" => 50},
+                {"note" => note1, "time" => 100},
+            ]
+        }
+        records.push(record)
+      end
+    end
+
+    questions { TrainRecord.dumped_questions(records) }
+    user { create(:user) }
+  end
 end

@@ -24,9 +24,12 @@ class TrainRecordsController < ApplicationController
 		end
 	end
 
-	def interval_rates
-		res = TrainRecords::IntervalRates.call(params[:id])
-		render json: {intervalRates: res}
+	def means
+		unless record = TrainRecord.find(params[:id])
+			render json: {message: "Record not found"}, status: :not_found
+		end
+
+		render json: {means: record.means}
 	end
 
 	private

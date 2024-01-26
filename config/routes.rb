@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   get "/questionnaires/:name", to: "questionnaires#show"
   post "/questionnaires", to: "questionnaires#create"
 
+  get "/train_records/:id/means", to: "train_records#means"
+
   #なんとなくnamespaceで分けてみた
   namespace :test do
     get "ping", to: "tests#ping"
