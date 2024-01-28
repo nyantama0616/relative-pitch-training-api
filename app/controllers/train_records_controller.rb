@@ -25,11 +25,16 @@ class TrainRecordsController < ApplicationController
 	end
 
 	def means
-		unless record = TrainRecord.find(params[:id])
+		unless train = TrainRecord.find(params[:id])
 			render json: {message: "Record not found"}, status: :not_found
 		end
 
-		render json: {means: record.means}
+		json = {
+			reactionTime: train.means[:reaction_time].values,
+			missCount: train.means[:miss_count].values,
+		}
+
+		render json: {means: json}
 	end
 
 	private

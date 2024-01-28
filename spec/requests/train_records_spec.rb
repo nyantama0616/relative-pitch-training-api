@@ -72,7 +72,7 @@ RSpec.describe "TrainRecords", type: :request do
     end
 
     it "レスポンス形式が正しい" do
-      expected = ["reaction_time", "miss_count"].sort
+      expected = ["reactionTime", "missCount"].sort
       expect(response.parsed_body["means"].keys.sort).to eq expected
     end
   end
