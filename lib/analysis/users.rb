@@ -2,16 +2,15 @@ $users = {
   father: User.find_by(user_name: "父"),
   mother: User.find_by(user_name: "母"),
   daughter: User.find_by(user_name: "娘"),
-  son: User.find_by(user_name: "息子")
+  son: User.find_by(user_name: "息子"),
+  shimamura: [],
+  system: [],
 }
 
-# users[:mother].questionnaire.each do |q|
-#   x = {
-#     id: q.id,
-#     name: q.name,
-#     file: q.data_file_path,
-#     data: q.created_at
-#   }
+[9, 10, 13, 16, 17].each do |id|
+  $users[:shimamura] << User.find(id)
+end
 
-#   p x
-# end
+[9, 10, 13, 16, 17].each do |id|
+  $users[:system] << User.find(id)
+end
