@@ -52,7 +52,8 @@ $datum = {
         }
       },
 
-      test: $users[:mother].train_records.find(62)
+      # test: $users[:mother].train_records.find(62)
+      test: User.find_by(user_name: "panda").train_records.find(64)
     },
   },
 
