@@ -88,4 +88,8 @@ module Analysis
       a[-1]["keyPushes"][-1]["time"] #ms
     end
   end
+
+  def total_miss_count
+    infos.map {|x| x[:miss_count]}.sum
+  end
 end
