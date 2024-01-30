@@ -7,7 +7,7 @@ $users = {
   system: [],
 }
 
-[9, 10, 13, 16, 17].each do |id|
+[8, 11, 14, 15, 18].each do |id|
   $users[:shimamura] << User.find(id)
 end
 
