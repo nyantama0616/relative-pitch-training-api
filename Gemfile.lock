@@ -102,6 +102,7 @@ GEM
       net-pop
       net-smtp
     marcel (1.0.2)
+    matrix (0.4.2)
     method_source (1.0.0)
     mini_mime (1.1.5)
     minitest (5.20.0)
@@ -206,6 +207,7 @@ DEPENDENCIES
   bootsnap
   debug
   factory_bot_rails (~> 6.2.0)
+  matrix
   mysql2 (~> 0.5)
   pry-byebug (~> 3.10.1)
   puma (~> 5.0)
