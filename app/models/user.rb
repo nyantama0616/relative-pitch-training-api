@@ -9,6 +9,7 @@ class User < ApplicationRecord
 	def info
 			json = as_json(only: [:id, :user_name, :email, :image_path])
 			json.deep_transform_keys! { |key| key.camelize(:lower) }
+			json["isShimamura"] = shimamura?
 			json
 	end
 end
