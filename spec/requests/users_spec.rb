@@ -11,9 +11,9 @@ RSpec.describe "Users", type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it "ユーザ(id, userName, email, imagePath)の一覧が取得できる" do
+    it "ユーザ(id, userName, email, isShimamura, imagePath)の一覧が取得できる" do
       ary = JSON.parse(response.body)["users"]
-      keys = ["id", "userName", "email", "imagePath"].sort
+      keys = ["id", "userName", "email", "isShimamura","imagePath"].sort
       
       expect(ary[0].keys.sort).to eq(keys)
     end

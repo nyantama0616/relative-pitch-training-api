@@ -16,11 +16,9 @@ RSpec.describe "Sessions", type: :request do
         expect(signed_in?).to be_truthy
       end
 
-      it "ユーザ(id, userName, email, imagePath)が取得できる" do
+      it "User.infoが取得できる" do
         user = JSON.parse(response.body)["user"]
-        keys = ["id", "userName", "email", "imagePath"].sort
-        
-        expect(user.keys.sort).to eq(keys)
+        expect(user).to eq @user.info.as_json
       end
     end
 
