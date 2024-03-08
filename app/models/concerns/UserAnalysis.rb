@@ -108,4 +108,10 @@ module UserAnalysis
 			end
 		end
 	end
+
+	def prev_train_reaction_time_mean
+		nth = train_count - 1
+		train = nth_train(nth)
+		train.means[:reaction_time].values.sum / 12.0
+	end
 end
