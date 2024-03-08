@@ -43,7 +43,53 @@ module UserAnalysis
 				m[i, j] = ((aft[note] - bef[note]) / bef[note]).round(3)
 			end
 		end
-		
-		m
+	end
+
+	def interest_question(nth)
+		if nth == 0
+			index = 1
+		elsif nth == 4
+			index = 9
+
+			if !shimamura? && subname == "A"
+				index = 8
+			end
+		else
+			return nil
+		end
+
+		self.questionnaire[index]
+	end
+
+	def self_efficacy_question(nth)
+		if nth == 0
+			index = 2
+		elsif nth == 4
+			index = 10
+
+			if !shimamura? && subname == "A"
+				index = 9
+			end
+		else
+			return nil
+		end
+
+		self.questionnaire[index]
+	end
+
+	def motivation_question(nth)
+		if nth == 0
+			index = 3
+		elsif nth == 4
+			index = 8
+
+			if !shimamura? && subname == "A"
+				index = 10
+			end
+		else
+			return nil
+		end
+
+		self.questionnaire[index]
 	end
 end
