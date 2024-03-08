@@ -92,4 +92,20 @@ module UserAnalysis
 
 		self.questionnaire[index]
 	end
+
+	def test_count
+		5.times do |i|
+			if nth_test(i).nil?
+				return i
+			end
+		end
+	end
+
+	def train_count
+		5.times do |i|
+			if nth_train(i).nil?
+				return i
+			end
+		end
+	end
 end

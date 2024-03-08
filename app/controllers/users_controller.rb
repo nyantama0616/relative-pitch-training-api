@@ -29,6 +29,24 @@ class UsersController < ApplicationController
         end
     end
 
+    def means
+        user = User.find(params[:id])
+        
+        logger.debug(params)
+        
+        nth = params[:nth] || 0 #最新からn番目の記録
+        logger.debug("nth: #{nth}")
+        nth = user.test_count - nth.to_i - 1
+        train = user.nth_train(nth)
+
+        json = {
+            reactionTime: train.means[:reaction_time].values,
+            missCount: train.means[:miss_count].values
+        }
+
+        render json: { means: json }
+    end
+
     private
 
     def user_params
