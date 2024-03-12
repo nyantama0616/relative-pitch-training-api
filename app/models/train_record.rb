@@ -25,6 +25,15 @@ class TrainRecord < ApplicationRecord
     def parsed_questions(questions_dumped)
       JSON.parse(questions_dumped)
     end
+
+    def create_from_json_file(path, user)
+      src = "db/json/train_record/#{path}"
+      json = File.read(src)
+      json.gsub!(" ", "")
+      json.gsub!("\r", "")
+      json.gsub!("\n", "")
+      create(questions: json, user: user)
+    end
   end
 
   private
