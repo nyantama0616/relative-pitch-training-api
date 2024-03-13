@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_24_070402) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_19_102504) do
   create_table "questionnaires", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
     t.bigint "user_id", null: false
@@ -36,6 +36,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_24_070402) do
     t.datetime "updated_at", null: false
     t.string "image_path", default: "panda.jpg"
     t.boolean "shimamura?", default: false, null: false
+    t.string "subname"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
