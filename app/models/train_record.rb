@@ -13,6 +13,15 @@ class TrainRecord < ApplicationRecord
     }
   end
 
+  def dump
+    dir = "tmp/train_record"
+    Dir.mkdir(dir) unless Dir.exist?(dir)
+
+    File.open("#{dir}/#{self.id}.json", "w") do |f|
+      f.write(questions)
+    end
+  end
+
   class << self
     def dumped_questions(questions_json)
       json = JSON.dump(questions_json)
