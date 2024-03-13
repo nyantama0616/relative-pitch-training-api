@@ -147,6 +147,13 @@ class Questionnaire < ApplicationRecord
     res = parsed[0]["answer"][/\d+/].to_i
   end
 
+  def music_experience
+    raise "not attribute questionnaire" if self.name != "attribute"
+
+    parsed = Questionnaire.parsed_data(self.data)
+    res = parsed[4]["answer"]
+  end
+
   def dump
     dir = "tmp/questionnaire"
     Dir.mkdir(dir) unless Dir.exist?(dir)

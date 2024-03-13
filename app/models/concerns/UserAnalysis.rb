@@ -103,9 +103,13 @@ module UserAnalysis
 		a = 5.times.map do |i|
 			expected = nth_questionnaire("motivation", i).expected_train_time * 60.0
 			actual = shimamura? ? 10 * 60.0 : nth_train(i).train_time / 1000.0
-			puts "expected: #{expected}, actual: #{actual}"
 			expected / actual.to_f
 		end
 		Util.median(a)
+	end
+
+	def has_music_experience?
+		q = nth_questionnaire("attribute", 0)
+		q.music_experience != "半年未満"
 	end
 end
