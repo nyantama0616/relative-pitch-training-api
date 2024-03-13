@@ -34,6 +34,13 @@ class Questionnaire < ApplicationRecord
     def parsed_data(data_dumped)
       JSON.parse(data_dumped)
     end
+
+    def create_from_json_file(path)
+      src = "db/json/questionnaire/#{path}"
+      json = JSON.parse(File.read(src))
+      user = User.find_by(user_name: json["user_name"])
+      Questionnaire.create(name: json["name"], user: user, data: json["data"])
+    end
   end
 
   def output_file
@@ -138,5 +145,15 @@ class Questionnaire < ApplicationRecord
 
     parsed = Questionnaire.parsed_data(self.data)
     res = parsed[0]["answer"][/\d+/].to_i
+  end
+
+  def dump
+    dir = "tmp/questionnaire"
+    Dir.mkdir(dir) unless Dir.exist?(dir)
+
+    File.open("#{dir}/#{self.id}.json", "w") do |f|
+      user_name = self.user.user_name
+      f.write(JSON.dump({name: self.name, user_name: user_name, data: self.data}))
+    end
   end
 end
