@@ -50,4 +50,93 @@ class Questionnaire < ApplicationRecord
       end
     end
   end
+
+  def compare(other)
+    raise "name mismatch" if other.name != self.name
+
+    parsed = Questionnaire.parsed_data(self.data)
+    other_parsed = Questionnaire.parsed_data(other.data)
+
+    res = ""
+    parsed.length.times do |i|
+      raise "content mismatch" if parsed[i]["content"] != other_parsed[i]["content"]
+
+      puts "#{parsed[i]["content"]}: #{parsed[i]["answer"]} => #{other_parsed[i]["answer"]} \n"
+    end
+
+    # group = self.user.shimamura? ? "島村" : "システム"
+
+    # text_before = <<~TEXT
+    #   \\begin{table}[htb]
+    #   \\centering
+    #   \\caption{トレーニングのモチベーションを問うためのアンケート #{group}群 被験者#{user.subname} 回答結果(1日目)}
+    #   \\label{q:モチベーション#{group}結果#{user.subname}}
+    #   \\begin{tabular}{@{}|p{10cm}|p{2cm}|p{2cm}|l|@{}}
+    #   \\hline
+    #   質問 & 1日目回答結果 & 5日目回答結果 \\\\
+    #   \\hline
+    #   \\noalign{\\smallskip}
+    #   \\hline
+    # TEXT
+
+    # text_medium = ""
+
+    # parsed.length.times do |i|
+    #   raise "content mismatch" if parsed[i]["content"] != other_parsed[i]["content"]
+
+    #   text_medium += "#{parsed[i]["content"]} & #{parsed[i]["answer"]} & #{other_parsed[i]["answer"]} \\\\ \\hline\n"  
+    # end
+
+    # text_after = <<~TEXT
+    #   \\end{tabular}
+    #   \\end{table}
+    # TEXT
+
+    # File.open("tmp/result.tex", "w") do |file|
+    #   res = text_before + text_medium + text_after
+    #   file.write(res)
+    # end
+  end
+
+  def output
+    parsed = Questionnaire.parsed_data(self.data)
+    group = self.user.shimamura? ? "島村" : "システム"
+
+    text_before = <<~TEXT
+      \\begin{table}[htb]
+      \\centering
+      \\caption{トレーニングのモチベーションを問うためのアンケート #{group}群 被験者#{user.subname} 回答結果}
+      \\label{q:モチベーション#{group}結果#{user.subname}}
+      \\begin{tabular}{@{}|p{8cm}|p{3cm}|l|@{}}
+      \\hline
+      質問 & 回答結果 \\\\
+      \\hline
+      \\noalign{\\smallskip}
+      \\hline
+    TEXT
+
+    text_medium = ""
+  
+    parsed.length.times do |i|
+      next if parsed[i]["content"] == "出身地"
+      text_medium += "#{parsed[i]["content"]} & #{parsed[i]["answer"]} \\\\ \\hline\n"
+    end
+
+    text_after = <<~TEXT
+      \\end{tabular}
+      \\end{table}
+    TEXT
+
+    File.open("tmp/result.tex", "w") do |file|
+      res = text_before + text_medium + text_after
+      file.write(res)
+    end
+  end
+
+  def expected_train_time
+    raise "not motivation questionnaire" if self.name != "motivation"
+
+    parsed = Questionnaire.parsed_data(self.data)
+    res = parsed[0]["answer"][/\d+/].to_i
+  end
 end

@@ -45,52 +45,16 @@ module UserAnalysis
 		end
 	end
 
-	def interest_question(nth)
-		if nth == 0
-			index = 1
-		elsif nth == 4
-			index = 9
-
-			if !shimamura? && subname == "A"
-				index = 8
+	def nth_questionnaire(name, nth)
+		n = 0
+		questionnaire.each do |q, i|
+			if q.name == name
+				return q if n == nth
+				n += 1
 			end
-		else
-			return nil
 		end
 
-		self.questionnaire[index]
-	end
-
-	def self_efficacy_question(nth)
-		if nth == 0
-			index = 2
-		elsif nth == 4
-			index = 10
-
-			if !shimamura? && subname == "A"
-				index = 9
-			end
-		else
-			return nil
-		end
-
-		self.questionnaire[index]
-	end
-
-	def motivation_question(nth)
-		if nth == 0
-			index = 3
-		elsif nth == 4
-			index = 8
-
-			if !shimamura? && subname == "A"
-				index = 10
-			end
-		else
-			return nil
-		end
-
-		self.questionnaire[index]
+		nil
 	end
 
 	def test_count
@@ -113,5 +77,35 @@ module UserAnalysis
 		nth = train_count - 1
 		train = nth_train(nth)
 		train.means[:reaction_time].values.sum / 12.0
+	end
+
+	# 平均反応時間の変化率
+	def reaction_ratio
+		reaction_times0 = test_before.means[:reaction_time].values
+		reaction_times4 = nth_test(4).means[:reaction_time].values
+
+		median0 = Util.median(reaction_times0)
+		median1 = Util.median(reaction_times4)
+
+		(median1 - median0) / median0
+	end
+
+	# 総ミス回数の変化率
+	def miss_ratio
+		miss0 = test_before.total_miss_count
+		miss4 = nth_test(4).total_miss_count
+
+		(miss4 - miss0) / miss0.to_f
+	end
+
+	# トレーニング時間比
+	def motiv_ratio
+		a = 5.times.map do |i|
+			expected = nth_questionnaire("motivation", i).expected_train_time * 60.0
+			actual = shimamura? ? 10 * 60.0 : nth_train(i).train_time / 1000.0
+			puts "expected: #{expected}, actual: #{actual}"
+			expected / actual.to_f
+		end
+		Util.median(a)
 	end
 end
